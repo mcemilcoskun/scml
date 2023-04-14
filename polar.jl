@@ -5,6 +5,7 @@ module polar
 		m::Int	# log2(n)
 		k::Int	# code dimension
 		maxN_nodes::Int
+		eta::Int
 		frozen_pattern::Array{Bool,1}
 		dfrozen_pattern::Array{Bool,1}
 		dfCons::Dict{Int64,Array{Int64,1}}
@@ -24,14 +25,14 @@ module polar
 		flipS::Array{Float64, 1}
 		N_node::Int
 		last_flip_set::Array{Int, 1}
-		eta::Int
-		function Properties(n::Int, k::Int, maxN_nodes::Int, frozen_pattern::Array{Bool,1}, dfCons::Dict{Int64,Array{Int64,1}}, Pe::Array{Float64,1})
+		function Properties(n::Int, k::Int, maxN_nodes::Int, eta::Int, frozen_pattern::Array{Bool,1}, dfCons::Dict{Int64,Array{Int64,1}}, Pe::Array{Float64,1})
 			m::Int = Int(log2(n))
 			@assert n > 0
 			@assert (n & (n - 1)) == 0 # power of 2
 			@assert length(frozen_pattern) == n
 			@assert k > 0
 			@assert maxN_nodes >= n
+			@assert eta >= 1
 			@assert n == k + sum(frozen_pattern)
 			@assert length(Pe) == n
 			#init datastructures
@@ -64,8 +65,7 @@ module polar
 			end
 			M_cml = Inf
 			N_node = 0
-			eta = Int(m) #list size = logN
-			new(n, m, k, maxN_nodes, frozen_pattern, dfrozen_pattern, dfCons, rho, L, C, perm_bitrev, v, u_hat, M, M_cml, MM, SS, flipList, flipM, flipS, N_node, last_flip_set, eta)
+			new(n, m, k, maxN_nodes, eta, frozen_pattern, dfrozen_pattern, dfCons, rho, L, C, perm_bitrev, v, u_hat, M, M_cml, MM, SS, flipList, flipM, flipS, N_node, last_flip_set)
 		end
 	end
 	function recursively_calc_L(lambda::Int, phi::Int, p::Properties) # lambda from 1 to m+1
