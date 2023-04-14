@@ -110,4 +110,4 @@ function sim_pc(startSNRdB::Float64, SNRstep::Float64, min_errors::Int, target_B
 	end
 end
 
-@inbounds sim_pc(startSNRdB, SNRstep, min_errors, target_BLER, max_blocks, n, k, maxN_nodes, frozen_pattern, dfCons)
+@inbounds sim_pc(startSNRdB, SNRstep, min_errors, target_BLER, max_blocks, n, k, maxN_nodes, eta, frozen_pattern, dfCons)
