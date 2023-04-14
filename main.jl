@@ -6,6 +6,7 @@ Constr = "rm"
 # maximum decoding complexity
 λ_max = 20
 maxN_nodes = λ_max*n #typemax(Int64)
+eta = 10 # list size
 
 #SNR in Es/N0
 
@@ -43,7 +44,7 @@ using Printf
 include("polar.jl")
 include("DE.jl")
 
-function sim_pc(startSNRdB::Float64, SNRstep::Float64, min_errors::Int, target_BLER::Float64, max_blocks::Int, n::Int, k::Int, maxN_nodes::Int, frozen_pattern::Array{Bool,1}, dfCons::Dict{Int64,Array{Int64,1}})
+function sim_pc(startSNRdB::Float64, SNRstep::Float64, min_errors::Int, target_BLER::Float64, max_blocks::Int, n::Int, k::Int, maxN_nodes::Int, eta::Int, frozen_pattern::Array{Bool,1}, dfCons::Dict{Int64,Array{Int64,1}})
 	BLER = 1.0
 	SNRdB = startSNRdB - SNRstep
 
@@ -60,7 +61,7 @@ function sim_pc(startSNRdB::Float64, SNRstep::Float64, min_errors::Int, target_B
 		scale = sqrt(SNR)
 		symbol_mapping = Dict(0x00 => scale, 0x01 => -scale)
 		# pre-allocation
-		p = polar.Properties(n, k, maxN_nodes, frozen_pattern, dfCons, Pe) # polar coding functions
+		p = polar.Properties(n, k, maxN_nodes, eta, frozen_pattern, dfCons, Pe) # polar coding functions
 		w = Array{UInt8,1}(undef,k) # data bits
 		c = Array{UInt8,1}(undef,n) # codeword
 		z = Array{Float64,1}(undef,n) # noise
